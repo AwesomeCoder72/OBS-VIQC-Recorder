@@ -12,9 +12,10 @@ def start_match(ignore1, ingore2):
     # print(timer_source_name)
     timer_source = obs.obs_get_source_by_name(timer_source_name)
     print(timer_source)
-    timer_source_data = obs.calldata_source(timer_source, "scene")
-    print(timer_source_data)
-    timer_source.media_play_pause()
+    # timer_source_data = obs.calldata_source(timer_source, "scene")
+    # print(timer_source_data)
+    # timer_source.media_play_pause()
+    obs_source_media_play_pause(timer_source, True)
 
     obs.obs_source_release(timer_source)
     timer_source = None
