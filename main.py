@@ -5,44 +5,39 @@ Helpful links:
  - - 
 """
 from obspython import *
+from time import sleep
+import threading
 print("\n----------------------------------\n")
 
+def time_keeper(timer_source):
+    print("bruh")
+    obs_frontend_recording_start()
+    sleep(65)
+    obs_frontend_recording_stop()
+    obs_source_media_stop(timer_source)
+    print("bruh moment 2.0")
+    return
+
 def start_match(ignore1, ingore2):
-    global timer_source_name
+    global timer_source_name, time_thread
     timer_source = obs_get_source_by_name(timer_source_name)
+    time_thread = threading.Thread(target = time_keeper, args=(timer_source,))
+    time_thread.start()
     obs_source_media_restart(timer_source)
     print(obs_source_media_get_state(timer_source))
     obs_source_release(timer_source)
     timer_source = None
 
 def end_match(ignore1, ignore2):
-    global timer_source_name
+    global timer_source_name, time_thread
+    obs_frontend_recording_stop()
+    time_thread.stop()
     timer_source = obs_get_source_by_name(timer_source_name)
+    obs_source_media_set_time(timer_source, 63000)
     obs_source_media_stop(timer_source)
     print(obs_source_media_get_state(timer_source))
     obs_source_release(timer_source)
     timer_source = None
-
-# def abort_match(ignore1, ignore2):
-#     global timer_source_name
-#     timer_source = obs_get_source_by_name(timer_source_name)
-#     if obs_source_media_get_state(timer_source) == 4:
-#         obs_source_media_play_pause(timer_source, True)
-    
-#     obs_source_media_play_pause(timer_source, True)
-#     print(obs_source_media_get_state(timer_source))
-#     obs_source_release(timer_source)
-#     timer_source = None
-
-# def reset_match(ignore1, ignore2):
-#     global timer_source_name
-#     timer_source = obs_get_source_by_name(timer_source_name)
-    
-#     obs_source_media_restart(timer_source)
-#     obs_source_media_play_pause(timer_source, True)
-#     print(obs_source_media_get_state(timer_source))
-#     obs_source_release(timer_source)
-#     timer_source = None
 
 def script_properties():
     global props
@@ -57,7 +52,6 @@ def script_properties():
     source_enum = None
     obs_properties_add_button(props, "StartBtn", "Start Match", start_match)
     obs_properties_add_button(props, "EndBtn", "End Match", end_match)
-    # obs_properties_add_button(props, "ResetBtn", "Reset Match", reset_match)
 
     return props
 
