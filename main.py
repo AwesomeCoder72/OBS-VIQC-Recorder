@@ -9,6 +9,10 @@ from time import sleep
 import threading
 print("\n----------------------------------\n")
 
+def rename_and_compress():
+    global compress_output#, recording_path
+    print(obs_frontend_get_recording_output())
+
 def time_keeper(timer_source):
     print("bruh")
     obs_frontend_recording_start()
@@ -29,7 +33,7 @@ def start_match(ignore1, ingore2):
     timer_source = None
 
 def end_match(ignore1, ignore2):
-    global timer_source_name, time_thread
+    global timer_source_name, time_thread, compress_output
     obs_frontend_recording_stop()
     time_thread.stop()
     timer_source = obs_get_source_by_name(timer_source_name)
@@ -38,6 +42,8 @@ def end_match(ignore1, ignore2):
     print(obs_source_media_get_state(timer_source))
     obs_source_release(timer_source)
     timer_source = None
+    if compress_output:
+        rename_and_compress()
 
 def script_properties():
     global props
@@ -52,6 +58,7 @@ def script_properties():
     source_enum = None
     obs_properties_add_button(props, "StartBtn", "Start Match", start_match)
     obs_properties_add_button(props, "EndBtn", "End Match", end_match)
+    obs_properties_add_bool(props, "CompressBtn", "Compress Recordings on Completion?")
 
     return props
 
@@ -59,7 +66,8 @@ def script_update(settings):
     """
     Called when the script’s settings (if any) have been changed by the user.
     """
-    global timer_source_name
+    global timer_source_name, compress_output
     timer_source_name = obs_data_get_string(settings, "TimerSource")
-    print(timer_source_name)
-    # timer_source_info = obs_source_info.create(settings, obs_get_source_by_name(timer_source_name))
+    
+    compress_output = obs_data_get_bool(settings, "CompressBtn")
+    
