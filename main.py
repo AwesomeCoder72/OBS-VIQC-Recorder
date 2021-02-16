@@ -10,6 +10,7 @@ import threading
 print("\n----------------------------------\n")
 
 def rename_and_compress():
+    pass
     global compress_output#, recording_path
     print(obs_frontend_get_recording_output())
 
@@ -54,7 +55,6 @@ def end_match(ignore1, ignore2):
 
 def script_description():
     return """<div style='text-align: center;'><span><img height=30 src='file:"""+ str(script_path())+"iqlogo.png'>"+"""</span><h2>Match Timer and Recorder</h2></div>"""
-	# return "<span valign=middle sy><img height=18 src='file:"+ str(script_path())+"iqlogo.png"+"'/></span>"
 
 def script_properties():
     global props
@@ -69,7 +69,7 @@ def script_properties():
     source_enum = None
     obs_properties_add_button(props, "StartBtn", "Start Match", start_match)
     obs_properties_add_button(props, "EndBtn", "End Match", end_match)
-    obs_properties_add_bool(props, "CompressBtn", "Compress Recordings on Completion?")
+    obs_properties_add_bool(props, "CompressBtn", "Compress Recordings on Completion? (still in development)")
 
     return props
 
