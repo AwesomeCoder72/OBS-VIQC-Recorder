@@ -11,8 +11,8 @@ print("\n----------------------------------\n")
 
 def rename_and_compress():
     pass
-    global compress_output#, recording_path
-    print(obs_frontend_get_recording_output())
+    # global compress_output#, recording_path
+    # print(obs_frontend_get_recording_output())
 
 
 def time_keeper(timer_source):
